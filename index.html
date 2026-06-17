@@ -3,38 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notes Storage Platform</title>
+    <title>Notes Circle</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <header>
-        <h1>Notes Storage & Interaction Platform</h1>
-    </header>
+    <div class="container">
 
-    <main>
-        <p>
-            Welcome to the Notes Storage Platform where members can
-            collaborate and interact around shared notes.
-        </p>
-    </main>
+        <div class="hero-section">
+            <h4>NOTES CIRCLE</h4>
 
-    <!-- Chat Icon -->
+            <h1>Collaborate, Share and Manage Notes Together.</h1>
+
+            <p>
+                A shared workspace where members can store notes,
+                discuss ideas and stay organized in one place.
+            </p>
+
+            <div class="notes-container">
+
+                <div class="note-card blue">
+    Data Structures Notes - Linked List concepts and examples.
+</div>
+
+<div class="note-card white">
+    Placement Preparation - Aptitude and coding practice schedule.
+</div>
+
+<div class="note-card green">
+    Full Stack Development - Daily learning resources and project updates.
+</div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Chat Button -->
+
     <div class="chat-icon" id="chatIcon">
         💬
     </div>
 
-    <!-- Chat Popup -->
+    <!-- Chatbot -->
+
     <div class="chat-box" id="chatBox">
 
         <div class="chat-header">
-            ChatBot
+            Notes Assistant
+            <span id="closeBtn">✖</span>
         </div>
 
         <div class="chat-body" id="chatBody"></div>
 
         <div class="chat-footer">
-            <input type="text" id="userInput" placeholder="Type a message...">
+            <input
+                type="text"
+                id="userInput"
+                placeholder="Type a message..."
+            >
             <button onclick="sendMessage()">Send</button>
         </div>
 
