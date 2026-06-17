@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes Storage Platform</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Notes Storage & Interaction Platform</h1>
+    </header>
+
+    <main>
+        <p>
+            Welcome to the Notes Storage Platform where members can
+            collaborate and interact around shared notes.
+        </p>
+    </main>
+
+    <!-- Chat Icon -->
+    <div class="chat-icon" id="chatIcon">
+        💬
+    </div>
+
+    <!-- Chat Popup -->
+    <div class="chat-box" id="chatBox">
+
+        <div class="chat-header">
+            ChatBot
+        </div>
+
+        <div class="chat-body" id="chatBody"></div>
+
+        <div class="chat-footer">
+            <input type="text" id="userInput" placeholder="Type a message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
