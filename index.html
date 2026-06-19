@@ -8,12 +8,37 @@
 </head>
 <body>
 
+    <!-- Navigation Bar -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            Notes Circle
+        </div>
+
+        <ul class="nav-links">
+            <li>
+                <a href="index.html">Home</a>
+            </li>
+
+            <li>
+                <a href="contact.html">Contact Us</a>
+            </li>
+        </ul>
+
+    </nav>
+
+    <!-- Main Content -->
+
     <div class="container">
 
         <div class="hero-section">
+
             <h4>NOTES CIRCLE</h4>
 
-            <h1>Collaborate, Share and Manage Notes Together.</h1>
+            <h1>
+                Collaborate, Share and Manage Notes Together.
+            </h1>
 
             <p>
                 A shared workspace where members can store notes,
@@ -23,23 +48,24 @@
             <div class="notes-container">
 
                 <div class="note-card blue">
-    Data Structures Notes - Linked List concepts and examples.
-</div>
+                    Data Structures Notes - Linked List concepts and examples.
+                </div>
 
-<div class="note-card white">
-    Placement Preparation - Aptitude and coding practice schedule.
-</div>
+                <div class="note-card white">
+                    Placement Preparation - Aptitude and coding practice schedule.
+                </div>
 
-<div class="note-card green">
-    Full Stack Development - Daily learning resources and project updates.
-</div>
+                <div class="note-card green">
+                    Full Stack Development - Daily learning resources and project updates.
+                </div>
 
             </div>
+
         </div>
 
     </div>
 
-    <!-- Chat Button -->
+    <!-- Chat Icon -->
 
     <div class="chat-icon" id="chatIcon">
         💬
@@ -50,19 +76,31 @@
     <div class="chat-box" id="chatBox">
 
         <div class="chat-header">
+
             Notes Assistant
-            <span id="closeBtn">✖</span>
+
+            <span id="closeBtn">
+                ✖
+            </span>
+
         </div>
 
-        <div class="chat-body" id="chatBody"></div>
+        <div class="chat-body" id="chatBody">
+
+        </div>
 
         <div class="chat-footer">
+
             <input
                 type="text"
                 id="userInput"
                 placeholder="Type a message..."
             >
-            <button onclick="sendMessage()">Send</button>
+
+            <button onclick="sendMessage()">
+                Send
+            </button>
+
         </div>
 
     </div>
