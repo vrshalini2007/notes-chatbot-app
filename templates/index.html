@@ -13,8 +13,8 @@ href="{{ url_for('static', filename='css/style.css') }}">
     <div class="logo">Notes Circle</div>
 
     <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="contact.html">Contact Us</a></li>
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('contact') }}">Contact Us</a>
     </ul>
 </nav>
 
@@ -80,9 +80,7 @@ href="{{ url_for('static', filename='css/style.css') }}">
 
 </div>
 
-<script
-src="{{ url_for('static', filename='js/script.js') }}">
-</script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 </body>
 </html>
