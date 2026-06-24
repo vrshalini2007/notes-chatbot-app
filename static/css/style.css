@@ -97,6 +97,7 @@ body{
     align-items:center;
     font-size:28px;
     cursor:pointer;
+    z-index:10000;
 }
 
 .chat-box{
@@ -143,9 +144,6 @@ body{
 
 .bot-message{
     background:#f1f5f9;
-    padding:10px;
-    margin-bottom:10px;
-    border-radius:10px;
 }
 
 .user-message{

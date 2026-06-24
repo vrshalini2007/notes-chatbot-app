@@ -1,112 +1,80 @@
-// ==========================
-// CHATBOT CODE
-// ==========================
+console.log("script.js loaded");
 
-const chatIcon =
-document.getElementById("chatIcon");
-
-const chatBox =
-document.getElementById("chatBox");
-
-const closeBtn =
-document.getElementById("closeBtn");
-
-const chatBody =
-document.getElementById("chatBody");
+const chatIcon = document.getElementById("chatIcon");
+const chatBox = document.getElementById("chatBox");
+const closeBtn = document.getElementById("closeBtn");
+const chatBody = document.getElementById("chatBody");
+const userInput = document.getElementById("userInput");
 
 let step = -1;
 
 let firstName = "";
 let lastName = "";
-let deliverables = "";
+let email = "";
+let userId = null;
 
-if(chatIcon){
 
-    chatIcon.addEventListener(
-        "click",
-        () => {
+// OPEN CHAT
+if (chatIcon) {
+    chatIcon.addEventListener("click", () => {
 
-            chatBox.style.display =
-            "block";
+        chatBox.style.display = "block";
 
-            if(chatBody.innerHTML === ""){
+        if (chatBody.innerHTML === "") {
 
-                addBotMessage(
-                    "👋 Welcome to Notes Circle!"
-                );
+            checkExistingUser();
 
-                addBotMessage(
-                    "Click Send to start registration."
-                );
+            if (!localStorage.getItem("token")) {
+                addBotMessage("👋 Welcome to Notes Circle!");
+                addBotMessage("Type Hi to get started.");
             }
         }
-    );
+    });
 }
 
-if(closeBtn){
 
-    closeBtn.addEventListener(
-        "click",
-        () => {
-            chatBox.style.display =
-            "none";
-        }
-    );
+// CLOSE CHAT
+if (closeBtn) {
+    closeBtn.addEventListener("click", () => {
+        chatBox.style.display = "none";
+    });
 }
 
-function addBotMessage(message){
 
-    if(!chatBody) return;
+// BOT MESSAGE
+function addBotMessage(message) {
 
-    chatBody.innerHTML +=
-    `
-    <div class="bot-message">
-        ${message}
-    </div>
+    chatBody.innerHTML += `
+        <div class="bot-message">${message}</div>
     `;
 
     chatBody.scrollTop =
-    chatBody.scrollHeight;
+        chatBody.scrollHeight;
 }
 
-function addUserMessage(message){
 
-    if(!chatBody) return;
+// USER MESSAGE
+function addUserMessage(message) {
 
-    chatBody.innerHTML +=
-    `
-    <div class="user-message">
-        ${message}
-    </div>
+    chatBody.innerHTML += `
+        <div class="user-message">${message}</div>
     `;
 
     chatBody.scrollTop =
-    chatBody.scrollHeight;
+        chatBody.scrollHeight;
 }
 
-function sendMessage(){
 
-    const input =
-    document.getElementById(
-        "userInput"
-    );
+// SEND MESSAGE
+function sendMessage() {
 
-    if(!input) return;
+    let text = userInput.value.trim();
 
-    let text =
-    input.value.trim();
-
-    if(text === ""){
-        return;
-    }
+    if (text === "") return;
 
     addUserMessage(text);
 
-    if(step === -1){
-
-        addBotMessage(
-            "Let's get you added to the Notes Circle."
-        );
+    if (step === -1) {
 
         addBotMessage(
             "Please enter your First Name:"
@@ -115,7 +83,7 @@ function sendMessage(){
         step = 0;
     }
 
-    else if(step === 0){
+    else if (step === 0) {
 
         firstName = text;
 
@@ -126,400 +94,174 @@ function sendMessage(){
         step = 1;
     }
 
-    else if(step === 1){
+    else if (step === 1) {
 
         lastName = text;
 
         addBotMessage(
-            "Please enter your Deliverables:"
+            "Please enter your Email:"
         );
 
         step = 2;
     }
 
-    else if(step === 2){
+    else if (step === 2) {
 
-        deliverables = text;
+        email = text;
 
-        addBotMessage(
-            `✅ Thank you ${firstName}!`
-        );
-
-        addBotMessage(
-            `Your details have been recorded successfully.`
-        );
-
-        addBotMessage(
-            `First Name : ${firstName}<br>
-             Last Name : ${lastName}<br>
-             Deliverables : ${deliverables}`
-        );
-
-        step = 3;
+        registerUser();
     }
 
-    else{
+    else {
 
-        addBotMessage(
-            "Registration already completed."
-        );
+        saveNote(text);
     }
 
-    input.value = "";
+    userInput.value = "";
 }
 
-const userInput =
-document.getElementById(
-    "userInput"
-);
 
-if(userInput){
-
+// ENTER KEY
+if (userInput) {
     userInput.addEventListener(
         "keypress",
-        function(event){
+        function (event) {
 
-            if(event.key === "Enter"){
+            if (event.key === "Enter") {
                 sendMessage();
             }
         }
     );
 }
 
-// ==========================
-// CONTACT FORM CODE
-// ==========================
 
-const form =
-document.getElementById(
-    "contactForm"
-);
+// REGISTER USER
+async function registerUser() {
 
-if(form){
+    const response =
+        await fetch("/register", {
+            method: "POST",
 
-    const tbody =
-    document.querySelector(
-        "#dataTable tbody"
+            headers: {
+                "Content-Type":
+                    "application/json"
+            },
+
+            body: JSON.stringify({
+                first_name: firstName,
+                last_name: lastName,
+                email: email
+            })
+        });
+
+    const data =
+        await response.json();
+
+    localStorage.setItem(
+        "token",
+        data.token
     );
 
-    let editIndex = -1;
+    userId =
+        data.user.id;
 
-    window.addEventListener(
-        "load",
-        loadData
+    addBotMessage(
+        `✅ Welcome ${firstName}`
     );
 
-    form.addEventListener(
-        "submit",
-        function(event){
-
-            event.preventDefault();
-
-            let firstName =
-            document.getElementById(
-                "firstName"
-            ).value.trim();
-
-            let lastName =
-            document.getElementById(
-                "lastName"
-            ).value.trim();
-
-            let gender =
-            document.getElementById(
-                "gender"
-            ).value;
-
-            let age =
-            document.getElementById(
-                "age"
-            ).value.trim();
-
-            let address =
-            document.getElementById(
-                "address"
-            ).value.trim();
-
-            let phone =
-            document.getElementById(
-                "phone"
-            ).value.trim();
-
-            let email =
-            document.getElementById(
-                "email"
-            ).value.trim();
-
-            let description =
-            document.getElementById(
-                "description"
-            ).value.trim();
-
-            if(firstName === ""){
-                alert(
-                    "First Name is required"
-                );
-                return;
-            }
-
-            if(lastName === ""){
-                alert(
-                    "Last Name is required"
-                );
-                return;
-            }
-
-            if(gender === ""){
-                alert(
-                    "Please select Gender"
-                );
-                return;
-            }
-
-            if(!/^\d{10}$/.test(phone)){
-                alert(
-                    "Phone number must contain exactly 10 digits"
-                );
-                return;
-            }
-
-            if(
-                !/^[^\s@]+@[^\s@]+\.[^\s@]+$/
-                .test(email)
-            ){
-                alert(
-                    "Enter a valid Email Address"
-                );
-                return;
-            }
-
-            let users =
-            JSON.parse(
-                localStorage.getItem(
-                    "users"
-                )
-            ) || [];
-
-            if(editIndex === -1){
-
-                let submittedTime =
-                new Date()
-                .toLocaleString();
-
-                users.push({
-                    firstName,
-                    lastName,
-                    gender,
-                    age,
-                    address,
-                    phone,
-                    email,
-                    description,
-                    submittedTime
-                });
-
-                alert(
-                    "Record Added Successfully"
-                );
-            }
-            else{
-
-                users[editIndex]
-                .firstName =
-                firstName;
-
-                users[editIndex]
-                .lastName =
-                lastName;
-
-                users[editIndex]
-                .gender =
-                gender;
-
-                users[editIndex]
-                .age =
-                age;
-
-                users[editIndex]
-                .address =
-                address;
-
-                users[editIndex]
-                .phone =
-                phone;
-
-                users[editIndex]
-                .email =
-                email;
-
-                users[editIndex]
-                .description =
-                description;
-
-                editIndex = -1;
-
-                alert(
-                    "Record Updated Successfully"
-                );
-            }
-
-            localStorage.setItem(
-                "users",
-                JSON.stringify(users)
-            );
-
-            form.reset();
-
-            loadData();
-        }
+    addBotMessage(
+        `${firstName}, let's get started with the chat.`
     );
 
-    function loadData(){
+    step = 3;
+}
 
-        tbody.innerHTML = "";
 
-        let users =
-        JSON.parse(
-            localStorage.getItem(
-                "users"
-            )
-        ) || [];
+// CHECK EXISTING USER
+async function checkExistingUser() {
 
-        const table =
-        document.getElementById(
-            "dataTable"
+    const token =
+        localStorage.getItem(
+            "token"
         );
 
-        const heading =
-        document.getElementById(
-            "tableHeading"
+    if (!token) {
+        return;
+    }
+
+    const response =
+        await fetch("/check-user", {
+            method: "POST",
+
+            headers: {
+                "Content-Type":
+                    "application/json"
+            },
+
+            body: JSON.stringify({
+                token: token
+            })
+        });
+
+    const data =
+        await response.json();
+
+    if (
+        data.status ===
+        "existing"
+    ) {
+
+        userId =
+            data.user.id;
+
+        firstName =
+            data.user.first_name;
+
+        step = 3;
+
+        addBotMessage(
+            `👋 Welcome back ${firstName}`
         );
 
-        if(users.length === 0){
-
-            table.style.display =
-            "none";
-
-            heading.style.display =
-            "none";
-
-            return;
-        }
-
-        table.style.display =
-        "table";
-
-        heading.style.display =
-        "block";
-
-        users.forEach(
-            function(user,index){
-
-                let row =
-                tbody.insertRow();
-
-                row.innerHTML = `
-                    <td>${user.firstName}</td>
-                    <td>${user.lastName}</td>
-                    <td>${user.gender}</td>
-                    <td>${user.age}</td>
-                    <td>${user.address}</td>
-                    <td>${user.phone}</td>
-                    <td>${user.email}</td>
-                    <td>${user.description}</td>
-                    <td>${user.submittedTime}</td>
-
-                    <td>
-                        <button
-                        class="edit-btn"
-                        onclick="editUser(${index})">
-                        Edit
-                        </button>
-
-                        <button
-                        class="delete-btn"
-                        onclick="deleteUser(${index})">
-                        Delete
-                        </button>
-                    </td>
-                `;
-            }
+        addBotMessage(
+            `${firstName}, let's get started with the chat.`
         );
     }
 
-    window.editUser =
-    function(index){
+    else {
 
-        let users =
-        JSON.parse(
-            localStorage.getItem(
-                "users"
-            )
-        ) || [];
-
-        let user =
-        users[index];
-
-        document.getElementById(
-            "firstName"
-        ).value =
-        user.firstName;
-
-        document.getElementById(
-            "lastName"
-        ).value =
-        user.lastName;
-
-        document.getElementById(
-            "gender"
-        ).value =
-        user.gender;
-
-        document.getElementById(
-            "age"
-        ).value =
-        user.age;
-
-        document.getElementById(
-            "address"
-        ).value =
-        user.address;
-
-        document.getElementById(
-            "phone"
-        ).value =
-        user.phone;
-
-        document.getElementById(
-            "email"
-        ).value =
-        user.email;
-
-        document.getElementById(
-            "description"
-        ).value =
-        user.description;
-
-        editIndex = index;
-    };
-
-    window.deleteUser =
-    function(index){
-
-        let users =
-        JSON.parse(
-            localStorage.getItem(
-                "users"
-            )
-        ) || [];
-
-        users.splice(index,1);
-
-        localStorage.setItem(
-            "users",
-            JSON.stringify(users)
+        localStorage.removeItem(
+            "token"
         );
+    }
+}
 
-        loadData();
-    };
+
+// SAVE NOTE
+async function saveNote(note) {
+
+    if (!userId) {
+        addBotMessage(
+            "Please register first."
+        );
+        return;
+    }
+
+    await fetch("/save-note", {
+        method: "POST",
+
+        headers: {
+            "Content-Type":
+                "application/json"
+        },
+
+        body: JSON.stringify({
+            user_id: userId,
+            message: note
+        })
+    });
+
+    addBotMessage(
+        "✅ Note Saved Successfully."
+    );
 }
