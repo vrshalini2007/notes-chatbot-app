@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Notes</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static',
+          filename='css/style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="logo">Notes Circle</div>
+
+    <ul class="nav-links">
+        <li>
+            <a href="{{ url_for('home') }}">
+                Home
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('notes') }}">
+                All Notes
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<div class="dashboard-container">
+
+    <h1>All Notes</h1>
+    <p>Browse and manage notes from all users</p>
+
+    <div class="stats">
+
+        <div class="stat-card purple">
+            <h3>Total Notes</h3>
+            <h2>{{ total_notes }}</h2>
+        </div>
+
+        <div class="stat-card blue-card">
+            <h3>Total Users</h3>
+            <h2>{{ total_users }}</h2>
+        </div>
+
+        <div class="stat-card green-card">
+            <h3>Notes Today</h3>
+            <h2>{{ notes_today }}</h2>
+        </div>
+
+        <div class="stat-card orange-card">
+            <h3>Categories</h3>
+            <h2>{{ total_categories }}</h2>
+        </div>
+
+    </div>
+
+    <div class="search-box">
+        <input
+            type="text"
+            id="search"
+            placeholder="Search notes..."
+        >
+    </div>
+
+    <div class="notes-grid">
+
+        {% for item in notes %}
+
+        <div class="note-card-dashboard">
+
+            <div class="card-top">
+
+                <div class="avatar">
+                    {{ item.name[0] }}
+                </div>
+
+                <div>
+
+                    <div class="user-name">
+                        {{ item.name }}
+                    </div>
+
+                    <div class="note-time">
+                        {{ item.time }}
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="note-text">
+                {{ item.note }}
+            </div>
+
+            <span class="tag">
+                {{ item.tag }}
+            </span>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+<script>
+
+document
+.getElementById("search")
+.addEventListener("keyup", function(){
+
+    const value =
+        this.value.toLowerCase();
+
+    document
+    .querySelectorAll(".note-card-dashboard")
+    .forEach(card => {
+
+        card.style.display =
+            card.innerText
+            .toLowerCase()
+            .includes(value)
+            ? "block"
+            : "none";
+    });
+
+});
+
+</script>
+
+</body>
+</html>

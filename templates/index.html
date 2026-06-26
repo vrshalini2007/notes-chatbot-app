@@ -4,81 +4,138 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notes Circle</title>
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
 
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="logo">Notes Circle</div>
-
-        <ul class="nav-links">
-            <li><a href="{{ url_for('home') }}">Home</a></li>
-            <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
-        </ul>
-    </nav>
-
-    <!-- Main Content -->
-    <div class="container">
-
-        <div class="hero-section">
-
-            <h4>NOTES CIRCLE</h4>
-
-            <h1>Collaborate, Share and Manage Notes Together.</h1>
-
-            <p>
-                A shared workspace where members can store notes,
-                discuss ideas and stay organized in one place.
-            </p>
-
-            <div class="notes-container">
-
-                <div class="note-card blue">
-                    Data Structures Notes - Linked List concepts and examples.
-                </div>
-
-                <div class="note-card white">
-                    Placement Preparation - Aptitude and coding practice schedule.
-                </div>
-
-                <div class="note-card green">
-                    Full Stack Development - Daily learning resources and project updates.
-                </div>
-
-            </div>
-
-        </div>
-
+<!-- Chat Icon -->
+    <div class="chat-icon" id="chatIcon">
+        💬
     </div>
-
-    <!-- Chat Icon -->
-    <div class="chat-icon" id="chatIcon">💬</div>
 
     <!-- Chat Box -->
     <div class="chat-box" id="chatBox">
 
-        <!-- Header -->
         <div class="chat-header">
             Notes Assistant
             <span id="closeBtn">✖</span>
         </div>
 
-        <!-- Messages -->
-        <div class="chat-body" id="chatBody"></div>
+        <div class="chat-body" id="chatBody">
+        </div>
 
-        <!-- Input -->
         <div class="chat-footer">
-            <input type="text" id="chatInput" placeholder="Type a message...">
+            <input
+                type="text"
+                id="chatInput"
+                placeholder="Type a message..."
+                autocomplete="off"
+            >
             <button id="sendBtn">Send</button>
         </div>
 
     </div>
 
-    <!-- JS -->
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+<body>
 
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">Notes Circle</div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('notes') }}">All Notes</a></li>
+            <li>
+                <a href="#" id="navLogout" style="display:none;color:#ef4444;" onclick="logoutUser()">
+                    Logout
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-layout">
+
+        <!-- Left Panel -->
+        <div class="side-panel" id="sidePanel">
+
+            <!-- ===== SCREEN: Auth Choice ===== -->
+            <div class="panel-screen" id="screenAuth">
+                <div class="panel-brand">📝 Notes Circle</div>
+                <p class="panel-sub">Your personal note space</p>
+                <button class="btn-primary" onclick="showLogin()">Login</button>
+                <button class="btn-outline" onclick="showSignup()">Sign Up</button>
+            </div>
+
+            <!-- ===== SCREEN: Login ===== -->
+            <div class="panel-screen" id="screenLogin" style="display:none;">
+                <div class="panel-back" onclick="showAuth()">← Back</div>
+                <div class="panel-brand">Welcome Back</div>
+                <p class="panel-sub">Enter your email to continue</p>
+                <input type="email" id="loginEmail" class="panel-input" placeholder="Your email address">
+                <div id="loginError" class="panel-error"></div>
+                <button class="btn-primary" onclick="doLogin()">Login</button>
+            </div>
+
+            <!-- ===== SCREEN: Sign Up ===== -->
+            <div class="panel-screen" id="screenSignup" style="display:none;">
+                <div class="panel-back" onclick="showAuth()">← Back</div>
+                <div class="panel-brand">Create Account</div>
+                <p class="panel-sub">Fill in your details</p>
+                <input type="text" id="signupFirst" class="panel-input" placeholder="First name">
+                <input type="text" id="signupLast" class="panel-input" placeholder="Last name">
+                <input type="email" id="signupEmail" class="panel-input" placeholder="Email address">
+                <div id="signupError" class="panel-error"></div>
+                <button class="btn-primary" onclick="doSignup()">Create Account</button>
+            </div>
+
+            <!-- ===== SCREEN: Notes Dashboard ===== -->
+            <div class="panel-screen" id="screenNotes" style="display:none;">
+                <div class="notes-panel-header">
+                    <div>
+                        <div class="panel-brand" id="welcomeName">My Notes</div>
+                        <p class="panel-sub" id="notesCount">0 notes saved</p>
+                    </div>
+                    <button class="btn-icon-logout" onclick="logoutUser()" title="Logout">⏻</button>
+                </div>
+
+                <!-- Add Note Area -->
+                <div class="add-note-area">
+                    <textarea id="newNoteText" class="panel-textarea" placeholder="Write a new note..."></textarea>
+                    <button class="btn-primary" onclick="addNote()">+ Add Note</button>
+                </div>
+
+                <!-- Notes List -->
+                <div class="notes-list" id="notesList">
+                    <div class="notes-loading">Loading your notes...</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right: Hero Section -->
+        <div class="hero-section">
+            <h4>NOTES CIRCLE</h4>
+            <h1>Collaborate, Share and Manage Notes Together.</h1>
+            <p>
+                A shared workspace where members can store notes,
+                discuss ideas and stay organized in one place.
+            </p>
+            <div class="notes-container">
+                <div class="note-card blue">
+                    Data Structures Notes - Linked List concepts and examples.
+                </div>
+                <div class="note-card white">
+                    Placement Preparation - Aptitude and coding practice schedule.
+                </div>
+                <div class="note-card green">
+                    Full Stack Development - Daily learning resources and project updates.
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
